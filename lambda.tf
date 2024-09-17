@@ -33,7 +33,10 @@ resource "aws_lambda_function" "spring_boot_lambda" {
   handler       = "com.geeks.terminal.handler.StreamLambdaHandler::handleRequest"
   runtime       = "java11"
 
-  filename = "/Users/nandandubey/eclipse-workspace/spring-boot-lambda-test/target/spring-boot-lambda-test-0.0.1-SNAPSHOT.jar"
+  s3_bucket     = aws_s3_bucket.lambda_bucket.bucket
+  s3_key        = "spring-boot-lambda-test-0.0.1-SNAPSHOT.jar"
+
+  # filename = "/Users/nandandubey/eclipse-workspace/spring-boot-lambda-test/target/spring-boot-lambda-test-0.0.1-SNAPSHOT.jar"
 
   memory_size   = 1024
   timeout       = 900
@@ -45,7 +48,7 @@ resource "aws_lambda_function" "spring_boot_lambda" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_policy_attachment
+    aws_iam_role_policy_attachment.lambda_policy_attachment, resource.aws_s3_object.lambda_code
   ]
 }
 
